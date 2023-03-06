@@ -1,0 +1,54 @@
+{% extends '../base.html' %} 
+{% block title %}
+{{ block.super }} | Schemas 
+{% endblock %}
+{% block content %}
+<div class="w-50 mx-auto">
+  <div class="d-flex justify-content-between p-2">
+    <h3>Data Schemas</h3>
+    <a class="btn btn-success" href="{% url 'create_schema' %}">Add Schema</a>
+  </div>
+  {% if data_schemas %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Modified</th>
+        <th>Actions</th>
+        <th>CSV</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data_schema in data_schemas %}
+      <tr>
+        <td>{{data_schema.id}}</td>
+        <td>{{data_schema.name}}</td>
+        <td>{{data_schema.created_at}}</td>
+        <td>
+          <div class="d-flex">
+            <a
+              class="btn btn-outline-primary me-3"
+              href="{% url 'update_schema' pk=data_schema.id %}"
+              >Update</a
+            >
+            <a
+              class="btn btn-outline-danger"
+              href="{% url 'delete_schema' pk=data_schema.id %}"
+              >Delete</a
+            >
+          </div>
+        </td>
+        <td>
+          <a class="btn btn-info" href="{% url 'schema' pk=data_schema.id %}">Generate</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <span>No data schemas found</span>
+  {% endif %}
+</div>
+
+{% endblock %}

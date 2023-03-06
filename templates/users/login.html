@@ -1,0 +1,22 @@
+{% extends '../base.html' %}
+
+{% block title %}{{ block.super }} | Login {% endblock %}
+
+{% block content %}
+<div class="w-25 mx-auto mt-5">
+    <main class="form-signin">
+    <h2>
+        Login
+    </h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.username }}
+        {{ form.password }}
+        <button class="w-100 btn btn-lg btn-primary" type="submit">
+            Login
+        </button>
+    </form>
+    </main>
+</div>
+
+{% endblock %}

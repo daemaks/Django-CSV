@@ -1,0 +1,50 @@
+{% extends "../base.html" %} 
+{% block title %}
+{{ block.super }} | Create schema
+{% endblock %} 
+{% block content %}
+<div class="w-75 mx-auto my-5">
+  <form method="post">
+    <div class="d-flex justify-content-between">
+      <h3>Data Schema</h3>
+      <button class="btn btn-success" type="submit">Save</button>
+    </div>
+    {% csrf_token %}
+    <span>Name</span>
+    {{ schema_form.name }}
+
+    <h3 class="mt-3">New column</h3>
+    {{ column_formset.management_form }}
+    <div id="form-list">
+      {% for column_form in column_formset|slice:"3" %}
+      <div class="d-flex">
+        <div class="mb-3 me-3">
+          <span>Column name</span>
+          {{ column_form.name }}
+        </div>
+        <div class="mb-3 me-3">
+          <span>Type</span>
+          {{ column_form.type }}
+        </div>
+        <div class="mb-3 me-3">
+          <span>From</span>
+          {{ column_form.range_start }}
+        </div>
+        <div class="mb-3 me-3">
+          <span>To</span>
+          {{ column_form.range_end }}
+        </div>
+        <div class="mb-3 me-3">
+          <span>Sentences</span>
+          {{ column_form.sentences }}
+        </div>
+        <div class="mb-3 me-3">
+          <span>Order</span>
+          {{ column_form.order }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </form>
+</div>
+{% endblock %}

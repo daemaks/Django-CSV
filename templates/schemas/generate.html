@@ -1,0 +1,76 @@
+{% extends '../base.html' %}
+{% block title %}
+{{ block.super }} | Generate 
+{% endblock %} 
+{% block content %}
+<div class="w-50 mx-auto">
+  <h1 class="mt-3">Generate Data for <b>"{{ data_schema.name }}"</b></h1>
+  <form id="generate-form" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="num-records">Number of Records:</label>
+      <input
+        type="number"
+        class="form-control"
+        id="num-records"
+        name="num_records"
+        value="10"
+        min="1"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Generate</button>
+  </form>
+  <div id="status"></div>
+  <a
+    id="download-link"
+    href="#"
+    download
+    style="display: none"
+    class="btn btn-outline-success mt-3"
+    >Download</a
+  >
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#generate-form").submit(function (e) {
+      e.preventDefault();
+      var numRecords = $("#num-records").val();
+      $.ajax({
+        url: "{% url 'generate' data_schema.id %}",
+        type: "POST",
+        data: {
+          num_records: numRecords,
+          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+        },
+        dataType: "json",
+        success: function (data) {
+          console.log("success");
+          console.log(data);
+          $("#status").html(
+            '<span class="badge text-bg-success mt-3">Ready</span>'
+          );
+          $("#download-link")
+            .attr("href", data.url)
+            .attr("download", data.filename)
+            .show();
+        },
+        error: function (xhr, status, error) {
+          console.log(error);
+          $("#status").html(
+            '<span class="badge text-bg-danger mt-3">Error</span>'
+          );
+        },
+        beforeSend: function () {
+          $("#status").html(
+            '<span class="badge text-bg-secondary mt-3">Processing</span>'
+          );
+          $("#download-link").hide();
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ block.super }} | Update
+{% endblock %}
+{% block content %}
+<div class="w-75 mx-auto my-5">
+  <form method="post">
+    {% csrf_token %} {{ schema_form.as_p }}
+
+    <h2>Edit Columns</h2>
+    {{ column_formset.management_form }}
+    <div>
+      {% for form in column_formset|slice:"3" %}
+      <div class="d-flex">{{ form.as_table }}</div>
+      {% endfor %}
+    </div>
+    <input class="btn btn-success mt-3" type="submit" value="Save" />
+  </form>
+</div>
+{% endblock %}
